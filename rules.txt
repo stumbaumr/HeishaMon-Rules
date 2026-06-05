@@ -41,22 +41,10 @@ on timer=10 then
       @SetHeatpump = 1;
    end
    if $hour == 13 && $minute == 0 && @DHW_Temp < ( @DHW_Target_Temp + @DHW_Heat_Delta ) && @Operating_Mode_State < 3 && #dhwStarted == 0 then
-      #dhwStarted = 1;
-      if @Outside_Temp < 5 then
-         setTimer(30, 540);
-         @SetForceDefrost = 1;
-      else
-         setTimer(30, 5);
-      end
+      dhw_start();
    end
    if $dhwTemp < 18 && $operatingModeState < 3 && #dhwStarted == 0 then
-      #dhwStarted = 1;
-      if @Outside_Temp < 5 then
-         setTimer(30, 540);
-         @SetForceDefrost = 1;
-      else
-         setTimer(30, 5);
-      end
+      dhw_start();
    end
    if $hour == 18 && $minute == 0 && #offAtNight == 1 && @Heatpump_State == 1 then
       if @Operating_Mode_State == 0 && @Room_Thermostat_Temp > 21 && @Outside_Temp > 8 then
@@ -201,6 +189,15 @@ on throttle then
    end
 end
 
+on dhw_start then
+   #dhwStarted = 1;
+   if @Outside_Temp < 5 then
+      setTimer(30, 540);
+      @SetForceDefrost = 1;
+   else
+      setTimer(30, 5);
+   end
+end
 on timer=30 then
    #stateBeforeDHW = @Heatpump_State;
    #OpModeBeforeDHW = @Operating_Mode_State;
