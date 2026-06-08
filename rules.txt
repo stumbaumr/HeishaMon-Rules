@@ -21,6 +21,10 @@ on timer=10 then
    setTimer(10, 30);
    $hour = %hour;
    $minute = %minute;
+   if @Operating_Mode_State < 3 && #dhwStarted == 0 then
+      #stateBeforeDHW = @Heatpump_State;
+      #OpModeBeforeDHW = @Operating_Mode_State;
+   end
    if $hour == 8 && $minute == 0 then
       if @Outside_Temp < 12 then
          #maxPumpDutyBeforeDHW = #maxPumpDutyPower;
@@ -66,8 +70,6 @@ on timer=10 then
 end
 on dhw_start then
    #dhwStarted = 1;
-   #stateBeforeDHW = @Heatpump_State;
-   #OpModeBeforeDHW = @Operating_Mode_State;
    @SetHeatpump = 1;
    if @Outside_Temp < 5 then
       @SetForceDefrost = 1;
