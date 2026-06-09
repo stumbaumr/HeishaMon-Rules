@@ -85,7 +85,8 @@ end
 on @Defrosting_State then
    if @Heatpump_State == 1 then
       if @Defrosting_State == 1 && @ThreeWay_Valve_State == 1 then
-         #defrostWhileDHW = 2;
+         #defrostWhileDHW = 2;      
+         #dhwStarted = 1;
          @SetOperationMode = 0;
          setTimer(22, 30);
          setTimer(23, 60);
