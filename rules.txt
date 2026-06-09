@@ -24,9 +24,9 @@ on timer=10 then
       #stateBeforeDHW = @Heatpump_State;
       #opModeBeforeDHW = @Operating_Mode_State;
       #maxPumpDutyBeforeDHW = @Max_Pump_Duty;
-   end
-   if #dhwStarted == 0 && @Operating_Mode_State < 3 && @DHW_Temp < 20 then
-      dhw_start();
+      if @DHW_Temp < 20 then
+         dhw_start();
+      end
    end
    if $hour == 8 && $minute == 0 then
       if @Outside_Temp < 12 then
