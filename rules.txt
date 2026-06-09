@@ -1,19 +1,17 @@
 on System#Boot then
-   #stateBeforeDHW = 1;
-   #opModeBeforeDHW = 0;
-   @SetOperationMode = #opModeBeforeDHW;
-   #targetLowBeforeDHW = 31;
-   #targetHighBeforeDHW = 40;
    #maxPumpDutyQuiet = 112;
    #maxPumpDutyPower = 170;
-   #maxPumpDutyBeforeDHW = #maxPumpDutyQuiet;
+   @SetMaxPumpDuty = #maxPumpDutyQuiet;
    @SetPump = 0;
+   #stateBeforeDHW = 0;
+   #opModeBeforeDHW = 0;
+   #targetLowBeforeDHW = 31;
+   #targetHighBeforeDHW = 40;
    #defrostWhileDHW = 1;
    #offAtNight = 1;
    #quietAtNight = 1;
    #quietMinimumValue = 0;
    #dhwStarted = 0;
-   @SetZ1HeatRequestTemperature = 0;
    setTimer(10, 40);
 end
 
@@ -24,11 +22,11 @@ on timer=10 then
    if @Operating_Mode_State < 3 && #dhwStarted == 0 then
       #stateBeforeDHW = @Heatpump_State;
       #opModeBeforeDHW = @Operating_Mode_State;
+      #maxPumpDutyBeforeDHW = @Max_Pump_Duty;
    end
    if $hour == 8 && $minute == 0 then
       if @Outside_Temp < 12 then
-         #maxPumpDutyBeforeDHW = #maxPumpDutyPower;
-         @SetMaxPumpDuty = #maxPumpDutyBeforeDHW;
+         @SetMaxPumpDuty = #maxPumpDutyPower;
       end
       if @Operating_Mode_State == 0 && #offAtNight == 2 && @Heatpump_State == 0 then
          #offAtNight = 1;
@@ -58,8 +56,7 @@ on timer=10 then
       end
    end
    if $hour == 19 && $minute == 0 then
-      #maxPumpDutyBeforeDHW = #maxPumpDutyQuiet;
-      @SetMaxPumpDuty = #maxPumpDutyBeforeDHW;
+      @SetMaxPumpDuty = #maxPumpDutyQuiet;
       if @Operating_Mode_State == 0 && #offAtNight == 2 && @Heatpump_State == 1 then
          @SetHeatpump = 0;
       end
@@ -132,7 +129,6 @@ on @ThreeWay_Valve_State then
    end
 end
 on timer=21 then
-   #maxPumpDutyBeforeDHW = @Max_Pump_Duty;
    @SetMaxPumpDuty = #maxPumpDutyPower;
    @SetPump = 1;
 end
