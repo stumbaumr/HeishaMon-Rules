@@ -93,7 +93,7 @@ on @Defrosting_State then
       end
       if @Defrosting_State == 0 && #defrostWhileDHW == 2 then
          #defrostWhileDHW = 1;
-         @SetOperationMode = #opModeBeforeDHW + 4;
+         setTimer(20, 1);
       end
    end
 end
